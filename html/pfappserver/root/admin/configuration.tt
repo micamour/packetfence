@@ -18,6 +18,7 @@
         'admin/config/fingerbank-settings',
         'admin/config/authentication',
         'admin/config/portal_profile',
+        'admin/config/provisioners',
         'admin/config/violations',
         'admin/config/soh',
         'admin/config/roles',
