@@ -22,7 +22,7 @@ use File::Spec::Functions;
 
 our (
     #Directories
-    $install_dir, $bin_dir, $conf_dir, $lib_dir, $log_dir, $generated_conf_dir, $var_dir,
+    $install_dir, $bin_dir, $conf_dir, $lib_dir, $html_dir, $cert_dir, $log_dir, $generated_conf_dir, $var_dir,
     $tt_compile_cache_dir, $pfconfig_cache_dir,
 
     #Config files
@@ -72,7 +72,7 @@ BEGIN {
     @ISA = qw(Exporter);
     # Categorized by feature, pay attention when modifying
     @EXPORT = qw(
-        $install_dir $bin_dir $conf_dir $lib_dir $log_dir $generated_conf_dir $var_dir
+        $install_dir $bin_dir $conf_dir $lib_dir $html_dir $cert_dir $log_dir $generated_conf_dir $var_dir
         $tt_compile_cache_dir $pfconfig_cache_dir
         $default_config_file $pf_default_file
         $config_file $pf_config_file
@@ -82,7 +82,7 @@ BEGIN {
         $floating_devices_config_file
         $dhcp_fingerprints_file $dhcp_fingerprints_url
         $oui_file $oui_url
-        $profiles_config_file %Profiles_Config 
+        $profiles_config_file %Profiles_Config
         $switches_config_file $violations_config_file $authentication_config_file
         $chi_config_file $ui_config_file $floating_devices_file $log_config_file
         @stored_config_files @log_files
@@ -110,6 +110,7 @@ $bin_dir  = catdir( $install_dir,"bin" );
 $conf_dir = catdir( $install_dir,"conf" );
 $var_dir  = catdir( $install_dir,"var" );
 $lib_dir  = catdir( $install_dir,"lib" );
+$html_dir = catdir( $install_dir,"html" );
 $log_dir  = catdir( $install_dir,"logs" );
 $log_conf_dir  = catdir( $conf_dir,"log.conf.d" );
 
@@ -155,6 +156,8 @@ $server_pem = catfile($conf_dir,"ssl/server.pem");
 $oui_url               = 'http://standards.ieee.org/regauth/oui/oui.txt';
 $dhcp_fingerprints_url = 'http://www.packetfence.org/dhcp_fingerprints.conf';
 
+$cert_dir = catdir( $html_dir, "captive-portal/certs");
+
 @log_files = map {catfile($log_dir, $_)}
   qw(
   httpd.admin.access httpd.admin.catalyst httpd.admin.error httpd.admin.log
@@ -163,7 +166,7 @@ $dhcp_fingerprints_url = 'http://www.packetfence.org/dhcp_fingerprints.conf';
   httpd.proxy.reverse.access httpd.proxy.reverse.error
   httpd.webservices.access httpd.webservices.error
   packetfence.log pfbandwidthd.log pfdetect.log
-  pfdhcplistener.log pfdns.log pfmon.log 
+  pfdhcplistener.log pfdns.log pfmon.log
 );
 
 @stored_config_files = (
