@@ -37,6 +37,8 @@ sub build_child {
 
   $self->cleanup_whitespaces(\%tmp_cfg);
 
+  $tmp_cfg{zammit} = "zammit";
+
   $self->{cfg} = \%tmp_cfg;
 
   return \%tmp_cfg;
