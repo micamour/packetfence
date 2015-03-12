@@ -261,7 +261,6 @@ sub desAssociate : Public {
     return unless validate_argv(\@require,  \@found);
 
     my $logger = pf::log::get_logger();
-
     my $switch = pf::SwitchFactory->getInstance()->instantiate($postdata{'switch'});
     unless ($switch) {
         $logger->error("switch $postdata{'switch'} not found for desAssociate");
@@ -274,7 +273,7 @@ sub desAssociate : Public {
     sleep $pf::config::Config{'trapping'}{'wait_for_redirect'}; 
 
     $logger->info("[$postdata{'mac'}] DesAssociating mac on switch (".$switch->{'_id'}.")");
-    $switch->$deauthTechniques($postdata{'mac'});
+    $switch->$deauthTechniques($postdata{'mac'},%postdata);
 }
 
 sub firewall : Public {

@@ -332,9 +332,16 @@ sub unknownState : Private {
           "Make sure your network device configuration is correct."
         );
         my $node = node_view($mac);
+        my %opt;
         my $switch;
-        if( pf::SwitchFactory->hasId($node->{last_switch}) ){
+        if( pf::SwitchFactory::hasId($node->{last_switch}) ){
             $switch = pf::SwitchFactory->getInstance()->instantiate($node->{last_switch});
+        }
+        if (defined($switch) && $switch->supportsExternalPortal) {
+            $logger->info("Fetch extra reevaluate param from the switch module.");
+            #old style portal session to have parameters from the dispatcher
+            my $externalportalSession = pf::Portal::Session->new($mac);
+            %opt = $switch->reevaluate_param($externalportalSession,$c->session);
         }
 
         if(defined($switch) && $switch->supportsWebFormRegistration){
@@ -349,7 +356,7 @@ sub unknownState : Private {
             $c->detach;
         }
         else{
-            reevaluate_access( $mac, 'redir.cgi' );
+            reevaluate_access( $mac, 'redir.cgi', %opt );
         }
 
     }
@@ -440,10 +447,17 @@ sub webNodeRegister : Private {
     unless ( (defined($provisioner) && $provisioner->skipDeAuth) || $c->user_cache->get("do_not_deauth") ) {
         my $node = node_view($mac);
         my $switch;
-        if( pf::SwitchFactory->hasId($node->{last_switch}) ){
+        my %opt;
+        if( pf::SwitchFactory::hasId($node->{last_switch}) ){
             $switch = pf::SwitchFactory->getInstance()->instantiate($node->{last_switch});
         }
 
+        if (defined($switch) && $switch->supportsExternalPortal) {
+            $logger->info("Fetch extra reevaluate param from the switch module.");
+            #old style portal session to have parameters from the dispatcher
+            my $externalportalSession = pf::Portal::Session->new($mac);
+            %opt = $switch->reevaluate_param($externalportalSession,$c->session);
+        }
         if(defined($switch) && $switch->supportsWebFormRegistration){
             $logger->info("Switch supports web form release.");
             $c->stash(
@@ -456,7 +470,7 @@ sub webNodeRegister : Private {
             $c->detach;
         }
         else{
-            reevaluate_access( $mac, 'manage_register' );
+            reevaluate_access( $mac, 'manage_register', %opt );
         }
     }
 

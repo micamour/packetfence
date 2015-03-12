@@ -3080,6 +3080,19 @@ sub enableMABByIfIndex {
     return 0; 
 }
 
+=head1 reevaluateParam
+
+parameter to send to the reevaluate funtion
+
+=cut
+
+sub reevaluate_param {
+    my ($self, $portalSession, $catalystSession) = @_;
+    my $logger = Log::Log4perl::get_logger( ref($self) );
+    $logger->error("This function is unimplemented.");
+    return 0;
+}
+
 =back
 
 =head1 AUTHOR
