@@ -70,6 +70,7 @@ sub reevaluate_param {
       'password'         => $catalystSession->{'password'},
       'post'             => $portalSession->session->param("ecwp-original-param-post"),
    );
+   return %data;
 }
 
 =head2 returnRadiusAccessAccept
@@ -126,16 +127,13 @@ sub deauthenticateMacDefault {
 
     my $ua = LWP::UserAgent->new;
     $ua->timeout(5);
-    use Data::Dumper;
-    $logger->warn(Dumper %opts);
-    $logger->warn($opts{'post'});
-    #my $response = $ua->get($opts{'post'}.'/?magic='.$opts{'magic'}.'&username='.$opts{'username'}.'&password='.$opts{'password'});
-    my $response = $ua->post($opts{'post'}, magic => $opts{'magic'}, username => $opts{'username'}, password => $opts{'password'});
+    my $response = $ua->get($opts{'post'}.'/?magic='.$opts{'magic'}.'&username='.$opts{'username'}.'&password='.$opts{'password'});
+    #my $response = $ua->post($opts{'post'}, magic => $opts{'magic'}, username => $opts{'username'}, password => $opts{'password'});
     if ($response->is_success) {
         $logger->info("Node $mac registered and allowed to pass the Firewall");
         return 1;
     } else {
-        $logger->error("XML send error :".$response->status_line);
+        $logger->error("error :".$response->status_line);
         return 0;
     }
 }
