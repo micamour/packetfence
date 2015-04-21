@@ -18,6 +18,7 @@ use Moo;
 use pf::config;
 use Readonly;
 use pf::log;
+use pf::factory::pki_provider;
 use List::MoreUtils qw(any);
 
 =head1 Constants
@@ -102,6 +103,14 @@ Which violation should be raised when a device is not compliant
 
 has non_compliance_violation => (is => 'rw' );
 
+=head2 pki_provider
+
+The pki informations
+
+=cut
+
+has pki_provider => (is => 'rw');
+
 =head1 METHODS
 
 =head2 _build_template
@@ -171,6 +180,17 @@ sub matchOS {
 sub match {
     my ($self, $os, $node_attributes) = @_;
     return $self->matchOS($os) && $self->matchCategory($node_attributes);
+}
+
+=head2 getPkiProvider
+
+=cut
+
+sub getPkiProvider {
+    my ($self) = @_;
+    my $provider_id = $self->pki_provider;
+    return unless $provider_id;
+    return pf::factory::pki_provider->new($provider_id);
 }
 
 =head1 AUTHOR
