@@ -389,11 +389,11 @@ sub findProvisioner {
     my ($self, $mac, $node_attributes) = @_;
     my $logger = get_logger();
     $node_attributes ||= node_attributes($mac);
-    my $os = $node_attributes->{'device_class'};
-    unless(defined $os){
-        $logger->warn("Can't find provisioner for $mac since we don't have it's OS");
-        return;
-    }
+    my $os = $node_attributes->{'device_type'};
+#    unless(defined $os){
+#        $logger->warn("Can't find provisioner for $mac since we don't have it's OS");
+#        return;
+#    }
     return first { $_->match($os,$node_attributes) } $self->provisionerObjects;
 }
 
