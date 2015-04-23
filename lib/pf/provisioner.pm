@@ -169,8 +169,12 @@ sub matchOS {
     my ($self, $os) = @_;
     my @oses = @{$self->oses || []};
     #if no oses are defined then it will match all the oses
+    return 1 if @oses == 0;
+    #if os is undef then fail
+    return 0 unless defined $os;
     local $_;
-    return @oses == 0 || any { $os =~ $_ } @oses;
+    #verify os matches list
+    return any { $os =~ /\Q$_\E/ } @oses;
 }
 
 =head2 match
